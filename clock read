@@ -1,0 +1,84 @@
+#include<stdio.h>
+#include<conio.h>
+#include<algorithm>
+#include<numeric>
+#include<iostream>
+#include<functional>
+#include<fstream>
+#include "opencv2/opencv.hpp"
+#include <opencv2/core/core.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
+#include <opencv2/objdetect/objdetect.hpp>
+#include <opencv2/highgui/highgui.hpp>
+#include <opencv2/core/types_c.h>
+#include <opencv2/video/video.hpp>
+#include <opencv2/video/background_segm.hpp>
+#include<Windows.h>
+
+
+using namespace std;
+using namespace cv;
+
+
+int main(int argc, char* argv[])
+{
+	VideoCapture cap(0);
+	if (cap.isOpened() == false)  
+ {
+  cout << "Cannot open the video camera" << endl;
+  cin.get(); 
+  return -1;
+ } 
+int frame_width = cap.get(CV_CAP_PROP_FRAME_WIDTH); 
+int frame_height = cap.get(CV_CAP_PROP_FRAME_HEIGHT); 
+    
+    Size frame_size(frame_width, frame_height);
+    int frames_per_second = 10;
+
+    
+    VideoWriter oVideoWriter("clock.avi", CV_FOURCC('M','J','P','G'),10, Size(frame_width,frame_height),true);
+    
+    
+    if (oVideoWriter.isOpened() == false) 
+    {
+        cout << "Cannot save the video to a file" << endl;
+        cin.get(); 
+        return -1;
+    }
+
+ string window_name = " CameraFeed";
+ namedWindow(window_name); 
+ 
+ while (true)
+ {
+  Mat frame;
+  bool bSuccess = cap.read(frame); 
+
+  
+  if (bSuccess == false) 
+  {
+   cout << "Video camera is disconnected" << endl;
+   cin.get(); 
+   break;
+  }
+  oVideoWriter.write(frame); 
+
+  
+  imshow(window_name, frame);
+
+  
+  if (waitKey(10) == 27)
+  {
+   cout << "Esc key is pressed by user. Stoppig the video" << endl;
+   break;
+  }
+ }
+
+ oVideoWriter.release();
+
+ return 0;
+
+
+
+	
+}
