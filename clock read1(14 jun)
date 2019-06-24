@@ -101,10 +101,6 @@ using namespace cv;
 
 
 
-
-
-
-
 int main(int argc, char* argv[])
 {
 	// Capturing frame as image
@@ -169,13 +165,39 @@ int main(int argc, char* argv[])
       // circle outline
       circle( src, center, radius, Scalar(0,0,255), 3, 8, 0 );
    }
-
-     
-	    
+  
 
   
   namedWindow( "Hough Circle Transform ", CV_WINDOW_AUTOSIZE );
   imshow( "Hough Circle Transform ", src );
+  imwrite("e.png",src);
+  Point ce;//center of detected circle
+  ce.x=330;
+  ce.y=238;
+  Point end;
+  end.x = 500;
+  end.y = 234;
+  
+  //line( src, ce, end, Scalar(0,0,255), 1, 8, 0);
+  //namedWindow( "Sector ", CV_WINDOW_AUTOSIZE );
+  //imshow( "Sector ", src );
+  int angle=-6;
+  int length=150;
+  Point endx;
+  for(int j=0;j<=59;j++)
+  {
+
+  endx.x= (ce.x + length*cos(angle*CV_PI/180.0));
+  endx.y= (ce.y + length*sin(angle*CV_PI/180.0));
+  line( src, ce, endx, Scalar(0,0,255), 1, 8, 0);
+  angle=angle+6;
+  }
+  namedWindow( "Sector1 ", CV_WINDOW_AUTOSIZE );
+  imshow( "Sector1 ", src );
+  //imwrite("SECTOR.png",src);
+  
+
+       
  
       waitKey(0);                                                
 
@@ -185,6 +207,5 @@ return 0;
 
 	
 }
-
 
 
