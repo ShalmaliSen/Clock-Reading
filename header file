@@ -69,7 +69,7 @@ void getImage(char* path, cv::Mat& src)
 	//imshow("CameraFeed", src);
 }
 
-void edgeDetected(cv::Mat& src)
+cv::Mat edgeDetected(cv::Mat& src)
 {
 	Mat gray, edge, draw,blurrr;
 	cvtColor(src, gray, CV_BGR2GRAY);
@@ -82,6 +82,7 @@ void edgeDetected(cv::Mat& src)
 	//imshow("edge1", edge);
 	//imshow("draw1", draw);
 	//imshow("blured", blurrr);
+	return blurrr;
 
 }
 
@@ -99,8 +100,37 @@ void HGCircle(cv::Mat& blurrr, cv::Mat& src)
       // circle outline
       circle( src, center, radius, Scalar(0,0,255), 1, 8, 0 );
    }
+  //imshow( "Hough Circle Transform ", src );
 
 
 
 
 }
+
+
+void Sector(cv::Mat& src)
+{
+  Point ce;//center of detected circle
+  ce.x=330;
+  ce.y=238;
+  int angle=-6;
+  int length=150;
+  Point endx;
+  for(int j=0;j<=59;j++)
+  {
+
+  endx.x= (ce.x + length*cos(angle*CV_PI/180.0));
+  endx.y= (ce.y + length*sin(angle*CV_PI/180.0));
+  line( src, ce, endx, Scalar(0,0,255), 1, 8, 0);
+  angle=angle+6;
+  }
+  namedWindow( "Sector1 ", CV_WINDOW_AUTOSIZE );
+  imshow( "Sector1 ", src );
+
+
+
+
+}
+
+
+
