@@ -7,8 +7,12 @@ int main(int argc, char* argv[])
 	cv::Mat src;
 	getImage(path, src);
 	edgeDetected(src);
+	cv::Mat blur1 = edgeDetected(src);
+	HGCircle(blur1, src);
+	Sector(src);
+	Mat src1 = imread("a.png"); 
 
-	HGCircle(blurrr, src)
+
 
 	
 
@@ -22,3 +26,6 @@ return 0;
 
 	
 }
+
+
+
