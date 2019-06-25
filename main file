@@ -11,7 +11,7 @@ int main(int argc, char* argv[])
 	HGCircle(blur1, src);
 	Sector(src);
 	Mat src1 = imread("a.png"); 
-
+	CropedImg(src);
 
 
 	
