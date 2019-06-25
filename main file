@@ -1,0 +1,24 @@
+#include"Header.h"
+
+int main(int argc, char* argv[])
+{
+	char* path = "a.png";
+	//cv::Mat src = getImage(path);
+	cv::Mat src;
+	getImage(path, src);
+	edgeDetected(src);
+
+	HGCircle(blurrr, src)
+
+	
+
+       
+ 
+      waitKey(0);                                                
+
+return 0;
+
+
+
+	
+}
