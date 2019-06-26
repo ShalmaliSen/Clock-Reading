@@ -57,22 +57,24 @@ int capture_camera()
 	}
 }
 
-//cv::Mat getImage(char* path)
-//{
-	//Mat src = imread(path); 
-	//return src;
-//}
-
-void getImage(char* path, cv::Mat& src)
+cv::Mat getImage(char* path)
 {
-	src = imread(path); 
-	//imshow("CameraFeed", src);
+	Mat src = imread(path); 
+	return src;
 }
+
+//void getImage(char* path, cv::Mat& src)
+//{
+//	src = imread(path); 
+//	//imshow("CameraFeed", src);
+//}
 
 cv::Mat edgeDetected(cv::Mat& src)
 {
+	cv::Mat tempSrc = src.clone();
+
 	Mat gray, edge, draw,blurrr;
-	cvtColor(src, gray, CV_BGR2GRAY);
+	cvtColor(tempSrc, gray, CV_BGR2GRAY);
  
 	Canny( gray, edge, 50, 150, 3);
  
@@ -86,30 +88,61 @@ cv::Mat edgeDetected(cv::Mat& src)
 
 }
 
-void HGCircle(cv::Mat& blurrr, cv::Mat& src)
+
+cv::Mat edgeDetected1(cv::Mat& cropImage)
 {
-	vector<Vec3f> circles;
-	HoughCircles( blurrr, circles, CV_HOUGH_GRADIENT, 1, blurrr.rows/8, 210, 210, 0, 0 );
+	cv::Mat temp = cropImage.clone();
+	 Mat dst, cdst;
+	Canny(temp, dst, 50, 200, 3);
+	//cvtColor(dst, cdst, CV_GRAY2BGR);
+		
+	return dst;
 
-  for( size_t i = 0; i < circles.size(); i++ )
-  {
-      Point center(cvRound(circles[i][0]), cvRound(circles[i][1]));
-      int radius = cvRound(circles[i][2]);
-      // circle center
-      circle( src, center, 3, Scalar(0,255,0), -1, 8, 0 );
-      // circle outline
-      circle( src, center, radius, Scalar(0,0,255), 1, 8, 0 );
-   }
-  //imshow( "Hough Circle Transform ", src );
-
-
-
+}
+cv::Mat edgeDetected2(cv::Mat& cropImage)
+{
+	cv::Mat temp = cropImage.clone();
+	 Mat dst, cdst;
+	Canny(temp, dst, 50, 200, 3);
+	cvtColor(dst, cdst, CV_GRAY2BGR);
+		
+	return cdst;
 
 }
 
 
-void Sector(cv::Mat& src)
+
+
+cv::Mat HGCircle(cv::Mat& blurrr, cv::Mat& src)
 {
+
+	cv::Mat tempSrc = src.clone();
+	vector<Vec3f> circles;
+	HoughCircles( blurrr, circles, CV_HOUGH_GRADIENT, 1, blurrr.rows/8, 210, 210, 0, 0 );
+	cv::Mat mask = Mat::zeros(src.rows, src.cols, CV_8UC1);
+
+	for( size_t i = 0; i < circles.size(); i++ )
+	{
+		Point center(cvRound(circles[i][0]), cvRound(circles[i][1]));
+		int radius = cvRound(circles[i][2]);
+		// circle center
+		circle( tempSrc, center, 3, Scalar(0,255,0), -1, 8, 0 );
+		// circle outline
+		circle( tempSrc, center, radius, Scalar(0,0,255), 1, 8, 0 );
+
+		circle( mask, center, radius, 255, -1, 8, 0 );
+	}
+	//imshow( "Hough Circle Transform ", tempSrc );
+
+	return mask;
+}
+
+
+ cv::Mat Sector(cv::Mat& src)
+{
+
+
+  cv::Mat temp = src.clone();
   Point ce;//center of detected circle
   ce.x=330;
   ce.y=238;
@@ -121,36 +154,33 @@ void Sector(cv::Mat& src)
 
   endx.x= (ce.x + length*cos(angle*CV_PI/180.0));
   endx.y= (ce.y + length*sin(angle*CV_PI/180.0));
-  line( src, ce, endx, Scalar(0,0,255), 1, 8, 0);
+  line( temp, ce, endx, Scalar(0,0,255), 1, 8, 0);
   angle=angle+6;
   }
-  namedWindow( "Sector1 ", CV_WINDOW_AUTOSIZE );
-  imshow( "Sector1 ", src );
+  //namedWindow( "Sector1 ", CV_WINDOW_AUTOSIZE );
+  //imshow( "Sector1 ", src );
+  return temp;
 
-
-
+  
 
 }
 
-void CropedImg(cv::Mat& src)
+cv::Mat HGline(cv::Mat& dst1, cv::Mat& cropImage1)
 {
-	int offset_x = 129;
-    int offset_y = 129;
+	vector<Vec4i> lines;
+	HoughLinesP(dst1, lines, 1, CV_PI/180, 50, 50, 10 );
+	for( size_t i = 0; i < lines.size(); i++ )
+		{
+			Vec4i l = lines[i];
+			line( cropImage1, Point(l[0], l[1]), Point(l[2], l[3]), Scalar(0,255,0), 1, CV_AA);
+		}   
 
-    cv::Rect roi;
-    roi.x = offset_x;
-    roi.y = offset_y;
-    roi.width = src.size().width - (offset_x*2);
-    roi.height = src.size().height - (offset_y*2);
-
-    /* Crop the original image to the defined ROI */
-
-    cv::Mat crop = src(roi);
-    cv::imshow("cropedImg", crop);
-
+	return cropImage1;
 
 
 }
+
+
 
 
 
