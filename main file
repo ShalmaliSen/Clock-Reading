@@ -7,7 +7,7 @@ int main(int argc, char* argv[])
 	
 	cv::Mat blur1 = edgeDetected(src);
 	cv::Mat mask = HGCircle(blur1, src);
-
+	cv::imshow("mask", mask );
 		
 	cv::Mat cropImage;
 	src.copyTo(cropImage, mask);
@@ -25,6 +25,17 @@ int main(int argc, char* argv[])
 	//cv::imshow("B", cdst1 );
 	cv::Mat lineDetected  = HGline(dst1, cropImage1);
 	cv::imshow("final", lineDetected);
+	Point pt1;
+	pt1.x=313;
+	pt1.y=329;
+	Point pt2;
+	pt2.x=324;
+	pt2.y=229;
+	Point pt6;
+	pt6.x=434;
+	pt6.y=232;
+	cv::Mat time  = Time(mask, pt1, pt2, pt6);
+	cv::imshow("time", time);
 	
 	
     waitKey(0);                                                
