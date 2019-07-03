@@ -239,10 +239,8 @@ cv::Mat HGCircle(cv::Mat& blurrr, cv::Mat& src)
 	cout<< pt1 << pt2 << endl;
 	cout<< "mins" << cv::norm(pt6-pt5) << endl;
 	cout<< pt5 << pt6 << endl;
-
-
-
-	
+	cout<< "sec" << cv::norm(pt4-pt3) << endl;
+	cout<< pt3 << pt4 << endl;
 	
 		
 	cout<< "Number of lines: " << lines.size() << endl;
@@ -250,6 +248,29 @@ cv::Mat HGCircle(cv::Mat& blurrr, cv::Mat& src)
 
 
 }
+
+ cv::Mat Time(cv::Mat& mask, Point& pt1, Point& pt2, Point& pt6 )
+ {
+
+		cv::Mat temp = mask.clone();
+	 	line( temp, pt1, pt2, Scalar(0,255,0), 1, CV_AA);
+	    line( temp, pt2, pt6, Scalar(0,255,0), 1, CV_AA);
+		double angle1 = atan2(pt1.y-pt2.y, pt1.x-pt2.x);
+		double angle2 = atan2(pt2.y-pt6.y, pt2.x-pt6.x);
+		double result = (angle2-angle1) * 180 / 3.14;
+		if (result<0) {
+					result+=360;
+					  }
+		cout<< "angle : " << result << endl;
+
+		return temp;
+
+ 
+ 
+ 
+ 
+ }
+ 
 
 
 
