@@ -11,12 +11,12 @@ int main(int argc, char* argv[])
 		
 	cv::Mat cropImage;
 	src.copyTo(cropImage, mask);
-	cv::imshow("crop", cropImage );
+	//cv::imshow("crop", cropImage );
 
 	cv::Mat sector1 = Sector(src);
 	cv::Mat cropImage1;
 	sector1.copyTo(cropImage1, mask);
-	cv::imshow("crop1", cropImage1 );
+	//cv::imshow("crop1", cropImage1 );
 
 	
 	cv::Mat dst1 = edgeDetected1(cropImage);
@@ -25,6 +25,7 @@ int main(int argc, char* argv[])
 	//cv::imshow("B", cdst1 );
 	cv::Mat lineDetected  = HGline(dst1, cropImage1);
 	cv::imshow("final", lineDetected);
+	
 	
     waitKey(0);                                                
 
