@@ -165,20 +165,96 @@ cv::Mat HGCircle(cv::Mat& blurrr, cv::Mat& src)
 
 }
 
-cv::Mat HGline(cv::Mat& dst1, cv::Mat& cropImage1)
+ cv::Mat HGline(cv::Mat& dst1, cv::Mat& cropImage1)
 {
+	//RNG rng;
+	
 	vector<Vec4i> lines;
+	Point pt3;
+	Point pt4;
+	int p1x, p1y, p2x, p2y=0;
+	int p3x, p3y, p4x, p4y=0;
+	int p5x, p5y, p6x, p6y=0;
+		
+	double slopes[11];
+		
 	HoughLinesP(dst1, lines, 1, CV_PI/180, 50, 50, 10 );
 	for( size_t i = 0; i < lines.size(); i++ )
 		{
-			Vec4i l = lines[i];
-			line( cropImage1, Point(l[0], l[1]), Point(l[2], l[3]), Scalar(0,255,0), 1, CV_AA);
-		}   
+			//Scalar color = Scalar(rng.uniform(0,255), 
+				//rng.uniform(0,255),
+				//rng.uniform(0,255));
 
+			Vec4i l = lines[i];
+			//line( cropImage1, Point(l[0], l[1]), Point(l[2], l[3]), Scalar(0,255,0), 1, CV_AA);
+			cout<< "points " << i << Point(l[0], l[1]) << Point(l[2], l[3]) << endl;
+			slopes[i]=(Point(l[2], l[3]).y-Point(l[0], l[1]).y)/(Point(l[2], l[3]).x-Point(l[0], l[1]).x);
+			cout<< "slopes" << slopes[i] << endl;
+			if(i==4 || i==7 || i==8 || i==9 )
+			{
+				p1x=p1x+Point(l[0], l[1]).x;
+				p1y=p1y+Point(l[0], l[1]).y;
+				p2x=p2x+Point(l[2], l[3]).x;
+				p2y=p2y+Point(l[2], l[3]).y;
+			
+			}
+			if(i==0 )
+			{
+					pt3.x=Point(l[0], l[1]).x;
+					pt3.y=Point(l[0], l[1]).y;
+					pt4.x=Point(l[2], l[3]).x;
+					pt4.y=Point(l[2], l[3]).y;
+			
+			}
+			if(i==2 || i==3 || i==5)
+			{
+				p5x=p5x+Point(l[0], l[1]).x;
+				p5y=p5y+Point(l[0], l[1]).y;
+				p6x=p6x+Point(l[2], l[3]).x;
+				p6y=p6y+Point(l[2], l[3]).y;
+
+			
+			}
+
+
+										
+	    }
+	Point pt1;
+	pt1.x=p1x/4;
+	pt1.y=p1y/4;
+	Point pt2;
+	pt2.x=p2x/4;
+	pt2.y=p2y/4;
+	line( cropImage1, pt1, pt2, Scalar(0,255,0), 1, CV_AA);
+	line( cropImage1, pt3, pt4, Scalar(0,255,0), 1, CV_AA);
+	Point pt5;
+	pt5.x=p5x/3;
+	pt5.y=p5y/3;
+	Point pt6;
+	pt6.x=p6x/3;
+	pt6.y=p6y/3;
+	line( cropImage1, pt5, pt6, Scalar(0,255,0), 1, CV_AA);
+	cv::norm(pt2-pt1);
+	cout<< "hrs" << cv::norm(pt2-pt1) << endl;
+	cout<< pt1 << pt2 << endl;
+	cout<< "mins" << cv::norm(pt6-pt5) << endl;
+	cout<< pt5 << pt6 << endl;
+
+
+
+	
+	
+		
+	cout<< "Number of lines: " << lines.size() << endl;
 	return cropImage1;
 
 
 }
+
+
+
+
+
 
 
 
