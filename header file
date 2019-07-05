@@ -249,28 +249,174 @@ cv::Mat HGCircle(cv::Mat& blurrr, cv::Mat& src)
 
 }
 
- cv::Mat Time(cv::Mat& mask, Point& pt1, Point& pt2, Point& pt6 )
+  cv::Mat Angle(cv::Mat& mask, Point& pt1, Point& pt2, Point& pt6 )
  {
 
 		cv::Mat temp = mask.clone();
-	 	line( temp, pt1, pt2, Scalar(0,255,0), 1, CV_AA);
-	    line( temp, pt2, pt6, Scalar(0,255,0), 1, CV_AA);
+		line( temp, pt1, pt2, Scalar(0,255,0), 1, CV_AA);
+		line( temp, pt2, pt6, Scalar(0,255,0), 1, CV_AA);
 		double angle1 = atan2(pt1.y-pt2.y, pt1.x-pt2.x);
-		double angle2 = atan2(pt2.y-pt6.y, pt2.x-pt6.x);
+		cout<< "angle1 : " << (angle1) * 180 / 3.14 << endl;
+		double angle2 = atan2(pt6.y-pt2.y, pt6.x-pt2.x);
+		cout<< "angle2 : " << (angle2) * 180 / 3.14 << endl;
 		double result = (angle2-angle1) * 180 / 3.14;
 		if (result<0) {
 					result+=360;
 					  }
 		cout<< "angle : " << result << endl;
-
 		return temp;
+		
 
- 
- 
  
  
  }
+
+  void TimeDetectionhrs(cv::Mat& angle, Point& pt1, Point& pt2, Point& pt6)
+  {
+	  		double angle1 = (atan2(pt1.y-pt2.y, pt1.x-pt2.x)) * 180 / 3.14;
+			if(angle1>= -90 && angle1< -60)
+			{
+				cout<< "Time hrs: 12" << endl;
+							
+			}
+			else if(angle1>= -60 && angle1< -30)
+			{
+				cout<< "Time hrs: 1" << endl;
+			
+			}
+			else if(angle1>= -30 && angle1< 0)
+			{
+				cout<< "Time hrs: 2" << endl;
+			
+			}
+			else if(angle1>= 0 && angle1< 30)
+			{
+				cout<< "Time hrs: 3" << endl;
+			
+			}
+			else if(angle1>=30 && angle1<60)
+			{
+				cout<< "Time hrs: 4" << endl;
+			
+			}
+			else if(angle1>=60 && angle1<90)
+			{
+				cout<< "Time hrs: 5" << endl;
+			
+			}
+			else if(angle1>=90 && angle1<120)
+			{
+				cout<< "Time hrs: 6" << endl;
+			}
+			else if(angle1>=120 && angle1<150)
+			{
+				cout<< "Time hrs: 7" << endl;
+			
+			}
+			else if(angle1>=150 && angle1<180)
+			{
+				cout<< "Time hrs: 8" << endl;
+			
+			}
+			else if(angle1>=180 && angle1<210)
+			{
+				cout<< "Time hrs: 9" << endl;
+			}
+			else if(angle1>=210 && angle1<240)
+			{
+				cout<< "Time hrs: 10" << endl;
+			
+			}
+			else if(angle1>=240 && angle1<270)
+			{
+				cout<< "Time hrs: 11" << endl;
+			
+			}
+			else
+			{
+			
+			}
+
+  
+  
+  }
+    void TimeDetectionmins(cv::Mat& angle, Point& pt1, Point& pt2, Point& pt6)
+  {
+	  		double angle2 = (atan2(pt6.y-pt2.y, pt6.x-pt2.x)) * 180 / 3.14;
+			if(angle2>= -90 && angle2< -60)
+			{
+				cout<< "Time mins: 00" << endl;
+							
+			}
+			else if(angle2>= -60 && angle2< -30)
+			{
+				cout<< "Time mins: 05" << endl;
+			
+			}
+			else if(angle2>= -30 && angle2< 0)
+			{
+				cout<< "Time mins: 10" << endl;
+			
+			}
+			else if(angle2>= 0 && angle2< 30)
+			{
+				cout<< "Time mins: 15" << endl;
+			
+			}
+			else if(angle2>=30 && angle2<60)
+			{
+				cout<< "Time mins: 20" << endl;
+			
+			}
+			else if(angle2>=60 && angle2<90)
+			{
+				cout<< "Time mins: 25" << endl;
+			
+			}
+			else if(angle2>=90 && angle2<120)
+			{
+				cout<< "Time mins: 30" << endl;
+			}
+			else if(angle2>=120 && angle2<150)
+			{
+				cout<< "Time mins: 35" << endl;
+			
+			}
+			else if(angle2>=150 && angle2<180)
+			{
+				cout<< "Time mins: 40" << endl;
+			
+			}
+			else if(angle2>=180 && angle2<210)
+			{
+				cout<< "Time mins: 45" << endl;
+			}
+			else if(angle2>=210 && angle2<240)
+			{
+				cout<< "Time mins: 50" << endl;
+			
+			}
+			else if(angle2>=240 && angle2<270)
+			{
+				cout<< "Time mins: 50" << endl;
+			
+			}
+			else
+			{
+			
+			}
+
+  
+  
+  }
+
+
+
  
+ 
+
+
+
 
 
 
