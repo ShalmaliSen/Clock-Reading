@@ -7,7 +7,7 @@ int main(int argc, char* argv[])
 	
 	cv::Mat blur1 = edgeDetected(src);
 	cv::Mat mask = HGCircle(blur1, src);
-	cv::imshow("mask", mask );
+	//cv::imshow("mask", mask );
 		
 	cv::Mat cropImage;
 	src.copyTo(cropImage, mask);
@@ -34,8 +34,23 @@ int main(int argc, char* argv[])
 	Point pt6;
 	pt6.x=434;
 	pt6.y=232;
-	cv::Mat time  = Time(mask, pt1, pt2, pt6);
-	cv::imshow("time", time);
+	cv::Mat angle=Angle(mask, pt1, pt2, pt6);
+	imshow("angle", angle);
+    
+
+	/*finding angle at 12
+	int angle1=-90;
+    int length=150;
+	Point r;
+	r.x= (pt2.x + length*cos(angle1*CV_PI/180.0));
+    r.y= (pt2.y + length*sin(angle1*CV_PI/180.0));
+    line( angle, pt2, r, Scalar(0,255,0), 1, 8, 0);
+	cv::imshow("R", angle);*/
+
+	TimeDetectionhrs(angle, pt1, pt2, pt6);
+	TimeDetectionmins(angle, pt1, pt2, pt6);
+	
+	
 	
 	
     waitKey(0);                                                
@@ -46,6 +61,9 @@ return 0;
 
 	
 }
+
+
+
 
 
 
