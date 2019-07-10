@@ -1,0 +1,580 @@
+10 jun
+
+#include<stdio.h>
+#include<conio.h>
+#include<algorithm>
+#include<numeric>
+#include<iostream>
+#include<functional>
+#include<fstream>
+#include "opencv2/opencv.hpp"
+#include <opencv2/core/core.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
+#include <opencv2/objdetect/objdetect.hpp>
+#include <opencv2/highgui/highgui.hpp>
+#include <opencv2/core/types_c.h>
+#include <opencv2/video/video.hpp>
+#include <opencv2/video/background_segm.hpp>
+#include<Windows.h>
+
+
+using namespace std;
+using namespace cv;
+
+
+int main(int argc, char* argv[])
+{
+	VideoCapture cap(0);
+	if (cap.isOpened() == false)  
+ {
+  cout << "Cannot open the video camera" << endl;
+  cin.get(); 
+  return -1;
+ } 
+//int frame_width = cap.get(CV_CAP_PROP_FRAME_WIDTH); 
+//int frame_height = cap.get(CV_CAP_PROP_FRAME_HEIGHT); 
+    
+   // Size frame_size(frame_width, frame_height);
+    //int frames_per_second = 10;
+
+    
+  //  VideoWriter oVideoWriter("clock.avi", CV_FOURCC('M','J','P','G'),10, Size(frame_width,frame_height),true);
+    
+    
+   // if (oVideoWriter.isOpened() == false) 
+   // {
+     //   cout << "Cannot save the video to a file" << endl;
+       // cin.get(); 
+        //return -1;
+    //}
+
+ string window_name = " CameraFeed";
+ namedWindow(window_name); 
+ 
+// while (true)
+ //{
+  Mat frame;
+  bool bSuccess = cap.read(frame); 
+ 
+
+  
+ // if (bSuccess == false) 
+ // {
+   //cout << "Video camera is disconnected" << endl;
+   //cin.get(); 
+ //  break;
+//  }
+ // oVideoWriter.write(frame); 
+
+  
+  imshow(window_name, frame);
+
+  
+  if (waitKey(10) == 27)
+  {
+   cout << "Esc key is pressed by user. Stoppig the video" << endl;
+  // break;
+  }
+// }
+
+ //oVideoWriter.release();
+ 
+ 
+ 
+
+ //edge detection
+ Mat gray, edge, draw;
+    cvtColor(frame, gray, CV_BGR2GRAY);
+ 
+    Canny( gray, edge, 50, 150, 3);
+ 
+    edge.convertTo(draw, CV_8U);
+    namedWindow("EdgeDetected", CV_WINDOW_AUTOSIZE);
+    imshow("EdgeDetected", draw);
+ 
+      waitKey(0);                                                
+
+return 0;
+
+
+	
+}
+
+14 JUN
+#include<stdio.h>
+#include<conio.h>
+#include<algorithm>
+#include<numeric>
+#include<iostream>
+#include<functional>
+#include<fstream>
+#include "opencv2/opencv.hpp"
+#include <opencv2/core/core.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
+#include <opencv2/objdetect/objdetect.hpp>
+#include <opencv2/highgui/highgui.hpp>
+#include <opencv2/core/types_c.h>
+#include <opencv2/video/video.hpp>
+#include <opencv2/video/background_segm.hpp>
+#include<Windows.h>
+
+
+using namespace std;
+using namespace cv;
+int main(int argc, char* argv[])
+{
+	// Capturing frame as image
+	//VideoCapture cap(0);
+	//if (cap.isOpened() == false)  
+//	{
+	 // cout << "Cannot open the video camera" << endl;
+	 // cin.get(); 
+	 // return -1;
+	//} 
+
+
+// string window_name = " CameraFeed";
+ //namedWindow(window_name); 
+ 
+ //while (true)
+// {
+ // Mat frame;
+  //bool bSuccess = cap.read(frame); 
+  
+//  imshow(window_name, frame);
+
+  
+  //if (waitKey(10) == 27)
+ // {
+   //cout << "Esc key is pressed by user. Stoppig the video" << endl;
+
+   //imwrite("d.png", frame);
+  // break;
+  
+ // }
+ //}
+
+
+//edge detection of captured image
+  Mat src = imread("a.png"); 
+ Mat gray, edge, draw;
+    cvtColor(src, gray, CV_BGR2GRAY);
+ 
+    Canny( gray, edge, 50, 150, 3);
+ 
+    edge.convertTo(draw, CV_8U);
+    namedWindow("EdgeDetected", CV_WINDOW_AUTOSIZE);
+    imshow("EdgeDetected", draw);
+	 namedWindow("CameraFeed", CV_WINDOW_AUTOSIZE);
+    imshow("CameraFeed", src);
+ 
+      waitKey(0);                                                
+
+return 0;
+
+
+
+	
+}
+To detct  circle hough circle code
+GaussianBlur(gray, blurrr, Size(9, 9), 2, 2 );
+	vector<Vec3f> circles;
+	HoughCircles( blurrr, circles, CV_HOUGH_GRADIENT, 1, blurrr.rows/8, 200, 100, 0, 0 );
+for( size_t i = 0; i < circles.size(); i++ )
+  {
+      Point center(cvRound(circles[i][0]), cvRound(circles[i][1]));
+      int radius = cvRound(circles[i][2]);
+      // circle center
+      circle( src, center, 3, Scalar(0,255,0), -1, 8, 0 );
+      // circle outline
+      circle( src, center, radius, Scalar(0,0,255), 3, 8, 0 );
+   }
+
+  
+  namedWindow( "Hough Circle Transform ", CV_WINDOW_AUTOSIZE );
+  imshow( "Hough Circle Transform ", src );
+ 
+      waitKey(0);                                                
+
+return 0;
+
+
+
+THEORY
+
+OpenCV Theory
+
+For this tutorial, we will heavily use two structures: Point and Scalar:
+Point
+It represents a 2D point, specified by its image coordinates x and y. We can define it as:
+
+Point pt;
+pt.x = 10;
+pt.y = 8;
+
+or
+
+Point pt =  Point(10, 8);
+
+DIFFERENT VALUES OF PARAMETERS OF HoughCircles
+
+1)	200, 100, 0, 0
+2)	220, 220, 0, 0
+3)	200, 200, 0, 0(almost perfct)
+4)	210, 210, 0, 0(almost perfct)
+
+
+24 jun
+Mat src1 = imread("a.png");
+  vector<Vec2f> lines;
+  HoughLines(edge, lines, 1, CV_PI/70, 100, 0, 0 );
+
+  for( size_t i = 0; i < lines.size(); i++ )
+  {
+     float rho = lines[i][0], theta = lines[i][1];
+     Point pt1, pt2;
+     double a = cos(theta), b = sin(theta);
+     double x0 = a*rho, y0 = b*rho;
+     pt1.x = cvRound(x0 + 1000*(-b));
+     pt1.y = cvRound(y0 + 1000*(a));
+     pt2.x = cvRound(x0 - 1000*(-b));
+     pt2.y = cvRound(y0 - 1000*(a));
+     line( src1, pt1, pt2, Scalar(0,255,0), 1, CV_AA);
+  }
+
+
+#include "opencv2/opencv.hpp"
+using namespace cv;
+
+int main()
+{
+    // Your initial image
+    Mat3b img = imread("path_to_image");
+
+    // Your Hough circle
+    Vec3f circ(100,50,30); // Some dummy values for now
+
+    // Draw the mask: white circle on black background
+    Mat1b mask(img.size(), uchar(0));
+    circle(mask, Point(circ[0], circ[1]), circ[2], Scalar(255), CV_FILLED);
+
+    // Compute the bounding box
+    Rect bbox(circ[0] - circ[2], circ[1] - circ[2], 2 * circ[2], 2 * circ[2]);
+
+    // Create a black image
+    Mat3b res(img.size(), Vec3b(0,0,0));
+
+    // Copy only the image under the white circle to black image
+    img.copyTo(res, mask);
+
+    // Crop according to the roi
+    res = res(bbox);
+
+    // Save the image
+    imwrite("filename.png", res);
+
+    // Show your result
+    imshow("Result", res);
+    waitKey();
+
+    return 0;
+}
+
+
+
+
+
+You can define a Region of Interest (ROI) on your image based on the coordinates of the circle, then imwrite will only save the cropped portion:
+
+cv::Rect roi(x, y, w, h); // I let you do the math ;)
+cv::Mat cropped = original(roi);
+cv::imwrite("cropped.png", cropped);
+
+
+
+
+
+To crop circle after circles=HoughCircles(...)
+
+if len(circles) == 1:
+    x, y, r = circles[0][0]
+    print x, y, r
+    mask = np.zeros((w0,h0),dtype=np.uint8)
+    cv2.circle(mask,(x,y),r,(255,255,255),-1,8,0)
+    #cv2.imwrite(argv[2],mask)
+    out = img*mask
+    white = 255-mask
+    cv2.imwrite(argv[2],out+white)
+
+
+The procedure for cropping an arbitrary quadrilateral (or any polygon for that matter) part of an image is summed us as:
+
+    Generate a "mask". The mask is black where you want to keep the image, and white where you don't want to keep it
+    Compute the "bitwise_and" between your input image and the mask
+
+So, lets assume you have an image. Throughout this I'll use an image size of 30x30 for simplicity, you can change this to suit your use case.
+
+cv::Mat source_image = cv::imread("filename.txt");
+And you have four points you want to use as the corners:
+
+cv::Point corners[1][4];
+corners[0][0] = Point( 10, 10 );
+corners[0][1] = Point( 20, 20 );
+corners[0][2] = Point( 30, 10 );
+corners[0][3] = Point( 20, 10 );
+const Point* corner_list[1] = { corners[0] };
+
+You can use the function cv::fillPoly to draw this shape on a mask:
+int num_points = 4;
+int num_polygons = 1;
+int line_type = 8;
+cv::Mat mask(30,30,CV_8UC3, cv::Scalar(0,0,0));
+cv::fillPoly( mask, corner_list, &num_points, num_polygons, cv::Scalar( 255, 255, 255 ),  line_type);
+Then simply compute the bitwise_and of the image and mask:
+
+cv::Mat result;
+cv::bitwise_and(source_image, mask, result);
+
+result now has the cropped image in it. If you want the edges to end up white instead of black you could instead do:
+
+cv::Mat result_white(30,30,CV_8UC3, cv::Scalar(255,255,255));
+cv::bitwise_and(source_image, mask, result_white, mask);
+
+In this case we use bitwise_and's mask parameter to only do the bitwise_and inside the mask. See this tutorial for more information and links to all the functions I mentioned.
+
+
+
+
+
+You may use cv::Mat::copyTo() like this:
+
+cv::Mat img = cv::imread("image.jpeg");
+// note mask may be single channel, even if img is multichannel
+cv::Mat mask = cv::Mat::zeros(img.rows, img.cols, CV_8UC1);
+// fill mask with nonzero values, e.g. as Tim suggests
+// cv::fillPoly(...)
+cv::Mat result(img.size(), img.type(), cv::Scalar(255, 255, 255));
+img.copyTo(result, mask);
+
+
+
+Basically, the idea is to draw the detect circle filled. Therefore, you have a mask. After, just copy your original image into the destination.
+
+// center and radius are the results of HoughCircle
+// mask is a CV_8UC1 image with 0
+cv::Mat mask = cv::Mat::zeros( img.rows, img.cols, CV_8UC1 );
+circle( mask, center, radius, Scalar(255,255,255), -1, 8, 0 ); //-1 means filled
+img.copyTo( dst, mask ); // copy values of img to dst if mask is > 0.
+
+You will find the doc here: circle and CopyTo
+
+You could also apply a ROI before copying image to reduce their size:
+
+cv::Mat roi( img, cv::Rect( center.x-radius, center.y-radius, radius*2, radius*2 ) );
+
+
+
+
+
+How to select a bounding box ( ROI ) in OpenCV (C++
+#include <opencv2/opencv.hpp>
+// selectROI is part of tracking API
+#include <opencv2/tracking.hpp>
+ 
+using namespace std;
+using namespace cv;
+ 
+ 
+int main (int argc, char **arv)
+{
+    // Read image
+    Mat im = imread("image.jpg");
+     
+    // Select ROI
+    Rect2d r = selectROI(im);
+     
+    // Crop image
+    Mat imCrop = im(r);
+     
+    // Display Cropped Image
+    imshow("Image", imCrop);
+    waitKey(0);
+     
+    return 0;
+}
+//////////////////////////////////////////////////////////////////////////////////////////
+REST OF THE MAIN CODE
+//edge detection of captured image
+	Mat gray, edge, draw,blurrr;
+	cvtColor(src, gray, CV_BGR2GRAY);
+ 
+	Canny( gray, edge, 50, 150, 3);
+ 
+	edge.convertTo(draw, CV_8U);
+	GaussianBlur(draw, blurrr, Size(9, 9), 2, 2 );
+	vector<Vec3f> circles;
+	HoughCircles( blurrr, circles, CV_HOUGH_GRADIENT, 1, blurrr.rows/8, 210, 210, 0, 0 );
+
+  for( size_t i = 0; i < circles.size(); i++ )
+  {
+      Point center(cvRound(circles[i][0]), cvRound(circles[i][1]));
+      int radius = cvRound(circles[i][2]);
+      // circle center
+      circle( src, center, 3, Scalar(0,255,0), -1, 8, 0 );
+      // circle outline
+      circle( src, center, radius, Scalar(0,0,255), 1, 8, 0 );
+   }
+  
+
+  	cv::hconcat(src, draw, src);
+	cv::hconcat(src, blurrr, src);
+
+    //namedWindow("EdgeDetected", CV_WINDOW_AUTOSIZE);
+    //imshow("EdgeDetected", draw);
+	namedWindow("CameraFeed", CV_WINDOW_AUTOSIZE);
+    imshow("CameraFeed", src);
+	//namedWindow("noiseReduced", CV_WINDOW_AUTOSIZE);
+ //   imshow("noiseReduced", blurrr);
+
+  //namedWindow( "Hough Circle Transform ", CV_WINDOW_AUTOSIZE );
+  //imshow( "Hough Circle Transform ", src );
+  imwrite("e.png",src);
+  Point ce;//center of detected circle
+  ce.x=330;
+  ce.y=238;
+  Point end;
+  end.x = 500;
+  end.y = 234;
+  
+  //line( src, ce, end, Scalar(0,0,255), 1, 8, 0);
+  //namedWindow( "Sector ", CV_WINDOW_AUTOSIZE );
+  //imshow( "Sector ", src );
+  int angle=-6;
+  int length=150;
+  Point endx;
+  for(int j=0;j<=59;j++)
+  {
+
+  endx.x= (ce.x + length*cos(angle*CV_PI/180.0));
+  endx.y= (ce.y + length*sin(angle*CV_PI/180.0));
+  line( src, ce, endx, Scalar(0,0,255), 1, 8, 0);
+  angle=angle+6;
+  }
+  namedWindow( "Sector1 ", CV_WINDOW_AUTOSIZE );
+  imshow( "Sector1 ", src );
+  //imwrite("SECTOR.png",src);
+
+
+  //cropping inner circle
+  Mat src1 = imread("a.png");
+ /* IplImage *src1;
+  IplImage *cropped_Image1;
+
+                     cout << "Width:" << src1->width << " pixels" << endl;
+                     cout << "Height:" << src1->height << " pixels" << endl;
+                     int width = src1->width;
+                     int lenght = src1->height;
+
+                     cv::Rect roi;
+                     roi.x = 1200; 
+                     roi.y = 355; 
+                     roi.width = 2340; 
+                     roi.height = 1425;  
+
+
+                     cropped_Image1 = cvCreateImage(cvSize(roi.width, roi.height), src1->depth, src1->nChannels);
+                     cvSetImageROI(src1, roi);
+                     cvCopy(src1, cropped_Image1);
+                     cvResetImageROI(src1);
+                     cvShowImage("Cropped Image", cropped_Image1);
+                     cvSaveImage("1_cropped.jpg", cropped_Image1);
+*/
+
+   
+  
+
+
+
+
+   // Mat src1 = imread("a.png");
+  //vector<Vec2f> lines;
+  //HoughLines(edge, lines, 1, CV_PI/50, 110, 0, 0 );
+
+  //for( size_t i = 0; i < lines.size(); i++ )
+  //{
+    // float rho = lines[i][0], theta = lines[i][1];
+     //Point pt1, pt2;
+     //double a = cos(theta), b = sin(theta);
+     //double x0 = a*rho, y0 = b*rho;
+     //pt1.x = cvRound(x0 + 1000*(-b));
+    // pt1.y = cvRound(y0 + 1000*(a));
+     //pt2.x = cvRound(x0 - 1000*(-b));
+     //pt2.y = cvRound(y0 - 1000*(a));
+     //line( src1, pt1, pt2, Scalar(0,255,0), 1, CV_AA);
+  //}
+
+
+ 
+ //imshow("detected lines", src1);
+
+  
+
+       
+ 
+      waitKey(0);                                                
+
+return 0;
+
+
+
+	
+}
+
+///////////////////////////////////////////////////////////////////////////////////////
+void CropedImg(cv::Mat& src)
+{
+	int offset_x = 140;
+    int offset_y = 140;
+
+    cv::Rect roi;
+    roi.x = offset_x;
+    roi.y = offset_y;
+    roi.width = src.size().width - (offset_x*2);
+    roi.height = src.size().height - (offset_y*2);
+
+    cv::Mat crop = src(roi);
+    cv::imshow("cropedImg", crop);
+
+
+
+}
+///////////////////////////////////////////////////////////////////////////////////
+cv::Mat HGline(cv::Mat& dst1, cv::Mat& cropImage1)
+{
+	RNG rng;
+	vector<Vec4i> lines;
+	HoughLinesP(dst1, lines, 1, CV_PI/180, 50, 50, 10 );
+	for( size_t i = 0; i < lines.size(); i++ )
+		{
+			Scalar color = Scalar(rng.uniform(0,255), 
+				rng.uniform(0,255),
+				rng.uniform(0,255));
+
+			Vec4i l = lines[i];
+			line( cropImage1, Point(l[0], l[1]), Point(l[2], l[3]), color, 1, CV_AA);
+	    }
+
+
+	cout<< "Number of lines: " << lines.size() << endl;
+	return cropImage1;
+
+
+}
+//////////////////////////////////////////////////////////////////////////////////
+Slope 7 – 1- corect
+ Slope 8 – 2 - wrong
+Slope 0 – 3 - wrong
+Slope -7 – 4- correct
+Slope 9 – 1 - wrong
+
+
